@@ -1,0 +1,139 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+{% if user.is_authenticated %}
+<!-- Button trigger modal -->
+
+<button type="button" class="btn btn-modal-newpost border-secondary" data-toggle="modal" data-target="#create">What are you thinking, 
+    {% if request.user.first_name %}
+        {{request.user.first_name|title}}?
+    {% else %}
+        {{request.user.username|title}}?
+    {% endif %}
+</button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content new-post-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Create publication</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method=post action="{% url 'newpost' username=user.username %}">
+                {% csrf_token %}
+                <textarea rows="10" class="form-control" name="textarea"></textarea>
+                <br>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-dark save" type="submit" value="Create"><i class="fa fa-check-square-o"></i> Create</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% for post in page_obj %}
+<div class="card border-secondary mb-3">
+    <h5 class="card-header"><a href="{% url 'profile' username=post.user %}">{{post.user|title}}</a></h5>
+    <div class="card-body text-secondary">
+      <h6 class="card-subtitle mb-2 text-muted">{{post.date}}</h6>
+      <p class="card-text">{{post.content}}</p>
+        {% if user.is_authenticated %}
+            {% if request.user == post.user %}
+            <!-- MODAL EDIT BUTTON-->
+            <button type="button" class="edit" data-toggle="modal" data-target="#edit">Edit</button>
+            <!-- MODAL DELETE BUTTON-->
+            <button type="button" class="delete" data-toggle="modal" data-target="#delete">Delete</button>
+            {% elif request.user in post.liked.all %}
+            <a class="likebutton" href="#" data-catid="{{ post.id }}" id="{{post.id}}" data-total="{{post.liked.all.count}}"  data-value="Unlike" value="submit"><i class="fa fa-heart" id="heart{{post.id}}" style="color:red;"></i><span id="liked{{post.id}}">{{post.liked.all.count}}</span></a>
+            {% else %}
+            <a class="likebutton" href="#" data-catid="{{ post.id }}" id="{{post.id}}" data-total="{{post.liked.all.count}}"  data-value="Like" value="submit"><i class="fa fa-heart" id="heart{{post.id}}" style="color:black;"></i><span id="liked{{post.id}}">{{post.liked.all.count}}</span></a>
+            {% endif %}
+        {% else %}
+            <p class="total-likes">Likes: {{post.liked.all.count}}</p>
+        {% endif %}
+    </div>
+</div>
+
+  <!-- Modal DELETE -->
+  <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog" role="document">
+      <div class="modal-content new-post-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Delete Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this post?</p>
+                <div class="modal-footer">
+                    <form method=post action="{% url 'delete' post_id=post.id %}">
+                        {% csrf_token %}
+                    <button class="btn btn-outline-danger save" type="submit" value="Delete"><i class="fa fa-check-square-o"></i> Delete</button>
+                    </form>
+                </div>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<!-- Modal EDIT -->
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content new-post-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit publication</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form method=post action="{% url 'edit' post_id=post.id %}">
+              {% csrf_token %}
+              <textarea rows="10" class="form-control" name="textarea">{{post.content}}</textarea>
+              <br>
+              <div class="modal-footer">
+                  <button class="btn btn-outline-dark save" type="submit" value="Save"><i class="fa fa-check-square-o"></i>Edit</button>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+    <hr>
+
+        <div class="container">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a href="?page=1" class="page-link">&laquo; First</a></li>
+                    <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link">Previous</a></li>
+                {% else %}
+                <li class="page-item disabled"><a class="page-link">&laquo; First</a></li>
+                <li class="page-item disabled"><a class="page-link">Previous</a></li>
+                {% endif %}
+                    
+        
+                {% if page_obj.number %}
+                <li class="page-item"><a class="page-link">{{ page_obj.number }}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link">0</a></li>
+                {% endif %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a></li>
+                <li class="page-item"><a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">Last &raquo;</a></li>
+                {% else %}
+                <li class="page-item disabled"><a class="page-link">Next</a></li>
+                <li class="page-item disabled"><a class="page-link">Last &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+{% endblock %}

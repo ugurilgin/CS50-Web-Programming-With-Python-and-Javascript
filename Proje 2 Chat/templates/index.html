@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block main %}
+	<div id = "channel_list">
+		<header>Channels</header>
+		<ul id = "change_channel">
+			{% for my_channel in channels %}
+			<li class = "my_channel" data-channel = "{{my_channel}}">{{ my_channel }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+	</div>
+	<div id = "welcome">
+		<h1>Welcome to Flack!</h1>
+		<p>You can chat with others here by creating your own channels or joining existing ones</p>
+		<p>To get started, please enter the name you would like to use:</p>
+		<form id = "starter_form">
+			<div class = "form-group">
+				<input type = "text" name = "name" id = "name" required placeholder="Display name" class = "form-control">
+			</div>
+			<button id = "starter_button" type = "submit" class = "btn btn-secondary">Submit</button>
+		</form>
+	</div>
+	<div id = "chat">
+		<h1 id = "chathead"></h1>
+		<ul id = "messages">
+		</ul>
+		<input type = "text" id = "my_message" required autofocus>
+		<button id = "sendbutton" class = "btn btn-secondary">Send</button>
+		<br>
+		<br>
+		<button type = "submit" id = "leave_channel" class = "btn btn-secondary">Leave channel</button>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+header {
+  height: 50%;
+  background-image: url(img/bk.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+body#1
+{
+	background-color=#263842;
+	
+}
+.nav-item:hover {
+  background-color: #b9bdb9;
+}
+
+@media screen and (max-width: 650px) {
+  header {
+    background-image: url(img/dort.jpg);
+  }
+  
+}
+img {
+  width: 90%;
+}
+
+.row {
+  padding: 5%;
+}
+
+#footer {
+  text-align: center;
+}
+
+#footer > h6 {
+  color: black;
+}
+
+#footer h6:hover {
+  color: blue;
+}
+
+#footer h6 {
+  font-family: "Times New Roman", Times, serif;;
+}
+
+th {
+  color: green;
+}
+
+/*# sourceMappingURL=styles.css.map */

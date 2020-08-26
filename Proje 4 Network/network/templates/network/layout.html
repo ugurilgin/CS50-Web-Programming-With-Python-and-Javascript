@@ -1,0 +1,95 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Social Network{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        </head>
+    <body>
+        
+            <nav class="navbar navbar-expand-lg navbar-expand-md navbar-light bg-light">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" title="Home" href="{% url 'index' %}"><i class="fa fa-home"></i></a>
+                            </li>
+                            {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link" title="Following" href="{% url 'following' username=user.username %}"><i class="fa fa-heartbeat"></i></a>
+                                </li>
+                        </ul>
+                        <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" title="My Profile" href="{% url 'profile' username=user.username %}"><i class="fa fa-user-circle-o"></i></a>    
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" title="Log Out" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i></a>
+                                </li>      
+                            {% else %}
+                        </ul>
+                        <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" title="Log In" href="{% url 'login' %}"><i class="fa fa-drivers-license-o"></i></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" title="Register" href="{% url 'register' %}"><i class="fa fa-plus-square"></i></a>
+                                </li>
+                        </ul>
+                            {% endif %} 
+            </nav>
+        <div class="container">
+            <div class="body">
+                {% block body %}
+                {% endblock %}
+            </div>
+        </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script>
+        $('.likebutton').click(function(){
+            var catid;
+            var total;
+            var value;
+            catid = $(this).data("catid");
+            
+
+            $.ajax(
+            {
+                type:"GET",
+                url: "/likepost",
+                data:{
+                        post_id: catid
+                },
+                success: function( data ) 
+                {
+                    total = $('#'+ catid).attr("data-total")
+                    if ($('#'+catid).attr("data-value") == 'Like'){
+                        $( '#liked'+catid ).text((parseInt(total) + 1));
+                        $( '#heart'+catid ).css('color', 'red')
+                        $('#'+catid).attr("data-total", parseInt(total) + 1)
+                        $('#'+catid).attr("data-value", 'Unlike')
+                    }
+                    else{
+                        $( '#liked'+catid ).text((parseInt(total) - 1));
+                        $( '#heart'+catid ).css('color', 'black')
+                        $('#'+catid).attr("data-total", parseInt(total) - 1)
+                        $('#'+catid).attr("data-value", 'Like')
+                    }
+                }
+            })
+
+            
+        })
+
+        $(function() {
+            $( 'a[href$="#"]' ).each(function() {
+                $( this ).attr( 'href','javascript:void(0);' )
+            });
+        });
+    </script> 
+</html>
+

@@ -1,0 +1,119 @@
+body {
+	background-color: #eee;
+}
+
+main .form-control
+{
+	width: auto;
+}
+
+/* place the welcome message to the center of the page horizontally */
+#welcome {
+	position: absolute;
+	width: auto;
+	max-width: 100%;
+	margin-left: 200px;
+	margin-right: 200px;
+	padding: 10px;
+	left: 50px;
+}
+
+/* center the chat and place it under the welcome text
+give a white background color for it as well*/
+#chat {
+	position: absolute;
+	align-items: center;
+	justify-content: center;
+	background-color: white;
+	width: auto;
+	max-width: 100%;
+	margin-left: 200px;
+	margin-right: 200px;
+	margin-top: 300px;
+	padding: 10px;
+	left: 50px;
+	min-width: 50%;
+	min-height: 100px;
+	border-radius: 10px;
+}
+#chat h1 {
+	text-align: center;
+}
+/* position the channel list and user list to the left-hand side of the page */
+#channel_list, #users {
+
+	position: relative;
+	flex-direction:column;
+	min-width: 190px;
+	
+	width: 200px;
+	border: 1px solid black;
+	padding: 10px;
+	left: : 500px;
+	max-height: 300px;
+	overflow-y: scroll;
+}
+
+nav {
+	width: 100%;
+	padding: 10px;
+}
+
+/* show the create channel form in a single line */
+#create_channel {
+	display: inline-flex;
+}
+#channel_list{
+
+	float:right;
+    width:100px;
+}
+}
+#channel {
+	padding-right: 10px;
+}
+
+header {
+	font-size: 1.5em;
+	text-align: center;
+	align-items: center;
+	left: -50px;
+}
+ul {
+	list-style: none;
+}
+
+#channel_list ul, #users ul {
+	width: 100%;
+}
+
+#channel_list li, #users li {
+	border: 1px solid grey;
+	width: 100%;
+	padding: 5px;
+	background-color: white;
+}
+
+/* add a hover effect to the elements in the channel list and the user list */
+#channel_list li:hover, #users li:hover {
+	background-color: #868e96;
+	color: white;
+}
+/* position the messages in the chat area */
+#messages div {
+	position: relative;
+	border-radius: 5px;
+	display: block;
+	padding: 5px;
+}
+/* give a distinct background color to the messages */
+#messages div span {
+	background-color: #eee;
+	padding: 5px;
+	border-radius: 5px;
+}
+/* position the user list below the channel list */
+#users {
+
+	margin-top: 300px;
+}
